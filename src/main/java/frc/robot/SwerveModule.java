@@ -18,13 +18,17 @@ public class SwerveModule {
     private final double KI;
     private final double KD;
 
-    public SwerveModule(int location, int STEERID, int DRIVEID, int ENCODERID) {
+    private final int OFFSET;
+
+    public SwerveModule(int STEERID, int DRIVEID, int ENCODERID, int OFFSET) {
         steerMotor = new TalonFX(STEERID);
         driveMotor = new TalonFX(DRIVEID);
 
         KP = 0.005;
         KI = 0;
         KD = 0;
+
+        this.OFFSET = OFFSET;
 
         steerController = new PIDController(KP, KI, KD);
         steerController.enableContinuousInput(-180, 180);
@@ -40,7 +44,7 @@ public class SwerveModule {
     */
 
     public void setSteerAngle(double angle) {        
-        double output = steerController.calculate(encoder.getAbsolutePosition(), angle);
+        double output = steerController.calculate(encoder.getAbsolutePosition() + OFFSET, angle);
         steerMotor.set(ControlMode.PercentOutput, output);
     }
 
