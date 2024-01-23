@@ -18,7 +18,7 @@ public class SwerveModule {
     private final double KI;
     private final double KD;
 
-    private final int OFFSET;
+    private double OFFSET;
 
     public SwerveModule(int STEERID, int DRIVEID, int ENCODERID, int OFFSET) {
         steerMotor = new TalonFX(STEERID);
@@ -26,7 +26,7 @@ public class SwerveModule {
 
         KP = 0.005;
         KI = 0;
-        KD = 0;
+        KD = 0.0001;
 
         this.OFFSET = OFFSET;
 
@@ -35,13 +35,15 @@ public class SwerveModule {
         encoder = new WPI_CANCoder(ENCODERID);
     }
 
-    /*
-    public double getEncoderPosition() {
-        double angle = Math.toRadians(encoder.getAbsolutePosition());
-        angle = Math.toDegrees(Math.atan2(Math.sin(angle), Math.cos(angle)));
-        return angle;
+    public void setConstants(double KP, double KI, double KD) {
+        steerController.setP(KP);
+        steerController.setI(KI);
+        steerController.setD(KD);
     }
-    */
+
+    public void setOffset(double OFFSET) {
+        this.OFFSET = OFFSET;
+    }
 
     public void setSteerAngle(double angle) {        
         double output = steerController.calculate(encoder.getAbsolutePosition() + OFFSET, angle);

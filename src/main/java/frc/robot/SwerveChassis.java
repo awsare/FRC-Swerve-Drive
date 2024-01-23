@@ -1,5 +1,7 @@
 package frc.robot;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 public class SwerveChassis {
     private final SwerveModule frontLeft;
     private final SwerveModule frontRight;
@@ -19,9 +21,28 @@ public class SwerveChassis {
         L = 19.5;
         W = 20.0;
         radius = Math.sqrt((L * L) + (W * W));
+
+        SmartDashboard.putNumber("fl", 0);
+        SmartDashboard.putNumber("fr", 0);
+        SmartDashboard.putNumber("bl", 0);
+        SmartDashboard.putNumber("br", 0);
+
+        SmartDashboard.putNumber("kp", 0.005);
+        SmartDashboard.putNumber("ki", 0);
+        SmartDashboard.putNumber("kd", 0);
     }
 
     public void drive(double x, double y, double r) {
+        frontLeft.setOffset(SmartDashboard.getNumber("fl", 0));
+        frontRight.setOffset(SmartDashboard.getNumber("fr", 0));
+        backLeft.setOffset(SmartDashboard.getNumber("bl", 0));
+        backRight.setOffset(SmartDashboard.getNumber("br", 0));
+
+        frontLeft.setConstants(SmartDashboard.getNumber("kp", 0.005), SmartDashboard.getNumber("ki", 0), SmartDashboard.getNumber("kd", 0.000100));
+        frontRight.setConstants(SmartDashboard.getNumber("kp", 0.005), SmartDashboard.getNumber("ki", 0), SmartDashboard.getNumber("kd", 0.000100));
+        backLeft.setConstants(SmartDashboard.getNumber("kp", 0.005), SmartDashboard.getNumber("ki", 0), SmartDashboard.getNumber("kd", 0.000100));
+        backRight.setConstants(SmartDashboard.getNumber("kp", 0.005), SmartDashboard.getNumber("ki", 0), SmartDashboard.getNumber("kd", 0.000100));
+
         double a = x - r * (L / radius);
         double b = x + r * (L / radius);
         double c = y - r * (W / radius);
@@ -36,11 +57,6 @@ public class SwerveChassis {
         double frontRightAngle = Math.atan2(b, d) / Math.PI;
         double backLeftAngle = Math.atan2(a, c) / Math.PI;
         double backRightAngle = Math.atan2(a, d) / Math.PI;
-
-        // System.out.println("fl" + frontLeftAngle);
-        // System.out.println("fr" + frontRightAngle);
-        // System.out.println("bl" + backLeftAngle);
-        // System.out.println("br" + backRightAngle);
 
         // frontLeft.setDriveSpeed(frontLeftSpeed);
         // frontRight.setDriveSpeed(frontRightSpeed);
