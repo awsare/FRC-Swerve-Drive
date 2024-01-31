@@ -1,5 +1,8 @@
 package frc.robot;
 
+import com.kauailabs.navx.frc.AHRS;
+import edu.wpi.first.wpilibj.SPI;
+
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class SwerveChassis {
@@ -8,40 +11,39 @@ public class SwerveChassis {
     private final SwerveModule backLeft;
     private final SwerveModule backRight;
 
+    private final AHRS gyro;
+
     private final double L;
     private final double W;
     private final double radius;
 
     public SwerveChassis() {
-        frontLeft = new SwerveModule(0, 1, 0, 0);
-        frontRight = new SwerveModule(2, 3, 1, 0);
-        backLeft = new SwerveModule(4, 5, 2, 0);
-        backRight = new SwerveModule(6, 7, 3, 0);
+        frontLeft = new SwerveModule(0, 1, 0, 65.830);
+        frontRight = new SwerveModule(2, 3, 1, 112.852);
+        backLeft = new SwerveModule(4, 5, 2, 109.248);
+        backRight = new SwerveModule(6, 7, 3, 180.352);
 
         L = 19.5;
         W = 20.0;
         radius = Math.sqrt((L * L) + (W * W));
 
-        SmartDashboard.putNumber("fl", 0);
-        SmartDashboard.putNumber("fr", 0);
-        SmartDashboard.putNumber("bl", 0);
-        SmartDashboard.putNumber("br", 0);
+        gyro = new AHRS(SPI.Port.kMXP);
 
-        SmartDashboard.putNumber("kp", 0.005);
+        SmartDashboard.putNumber("kp", 0.006);
         SmartDashboard.putNumber("ki", 0);
         SmartDashboard.putNumber("kd", 0);
     }
 
     public void drive(double x, double y, double r) {
-        frontLeft.setOffset(SmartDashboard.getNumber("fl", 0));
-        frontRight.setOffset(SmartDashboard.getNumber("fr", 0));
-        backLeft.setOffset(SmartDashboard.getNumber("bl", 0));
-        backRight.setOffset(SmartDashboard.getNumber("br", 0));
+        frontLeft.setConstants(SmartDashboard.getNumber("kp", 0.006), SmartDashboard.getNumber("ki", 0), SmartDashboard.getNumber("kd", 0.000100));
+        frontRight.setConstants(SmartDashboard.getNumber("kp", 0.006), SmartDashboard.getNumber("ki", 0), SmartDashboard.getNumber("kd", 0.000100));
+        backLeft.setConstants(SmartDashboard.getNumber("kp", 0.006), SmartDashboard.getNumber("ki", 0), SmartDashboard.getNumber("kd", 0.000100));
+        backRight.setConstants(SmartDashboard.getNumber("kp", 0.006), SmartDashboard.getNumber("ki", 0), SmartDashboard.getNumber("kd", 0.000100));
 
-        frontLeft.setConstants(SmartDashboard.getNumber("kp", 0.005), SmartDashboard.getNumber("ki", 0), SmartDashboard.getNumber("kd", 0.000100));
-        frontRight.setConstants(SmartDashboard.getNumber("kp", 0.005), SmartDashboard.getNumber("ki", 0), SmartDashboard.getNumber("kd", 0.000100));
-        backLeft.setConstants(SmartDashboard.getNumber("kp", 0.005), SmartDashboard.getNumber("ki", 0), SmartDashboard.getNumber("kd", 0.000100));
-        backRight.setConstants(SmartDashboard.getNumber("kp", 0.005), SmartDashboard.getNumber("ki", 0), SmartDashboard.getNumber("kd", 0.000100));
+        double heading = -Math.toRadians(gyro.getYaw());
+
+        //x = (x * Math.cos(heading)) - (y * Math.sin(heading));
+        //y = (x * Math.sin(heading)) + (y * Math.cos(heading));
 
         double a = x - r * (L / radius);
         double b = x + r * (L / radius);
@@ -58,14 +60,14 @@ public class SwerveChassis {
         double backLeftAngle = Math.atan2(a, c) / Math.PI;
         double backRightAngle = Math.atan2(a, d) / Math.PI;
 
-        // frontLeft.setDriveSpeed(frontLeftSpeed);
-        // frontRight.setDriveSpeed(frontRightSpeed);
-        // backLeft.setDriveSpeed(backLeftSpeed);
-        // backRight.setDriveSpeed(backRightSpeed);
+        frontLeft.setDriveSpeed(frontLeftSpeed * 0.1);
+        frontRight.setDriveSpeed(frontRightSpeed * 0.1);
+        backLeft.setDriveSpeed(backLeftSpeed * 0.1);
+        backRight.setDriveSpeed(backRightSpeed * 0.1);
 
-        frontLeft.setSteerAngle(frontLeftAngle * 180);
-        frontRight.setSteerAngle(frontRightAngle * 180);
-        backLeft.setSteerAngle(backLeftAngle * 180);
-        backRight.setSteerAngle(backRightAngle * 180);
+        frontLeft.setSteerAngle((frontLeftAngle * 180) - 45);
+        frontRight.setSteerAngle((frontRightAngle * 180) + 45);
+        backLeft.setSteerAngle((backLeftAngle * 180) - 180);
+        backRight.setSteerAngle((backRightAngle * 180));
     }
 }
