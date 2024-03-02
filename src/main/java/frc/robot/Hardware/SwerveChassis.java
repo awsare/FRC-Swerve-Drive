@@ -1,4 +1,4 @@
-package frc.robot;
+package frc.robot.Hardware;
 
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.SPI;
@@ -28,19 +28,10 @@ public class SwerveChassis {
         radius = Math.sqrt((L * L) + (W * W));
 
         gyro = new AHRS(SPI.Port.kMXP);
-
-        SmartDashboard.putNumber("kp", 0.006);
-        SmartDashboard.putNumber("ki", 0);
-        SmartDashboard.putNumber("kd", 0);
     }
 
     public void drive(double x, double y, double r) {
-        frontLeft.setConstants(SmartDashboard.getNumber("kp", 0.006), SmartDashboard.getNumber("ki", 0), SmartDashboard.getNumber("kd", 0.000100));
-        frontRight.setConstants(SmartDashboard.getNumber("kp", 0.006), SmartDashboard.getNumber("ki", 0), SmartDashboard.getNumber("kd", 0.000100));
-        backLeft.setConstants(SmartDashboard.getNumber("kp", 0.006), SmartDashboard.getNumber("ki", 0), SmartDashboard.getNumber("kd", 0.000100));
-        backRight.setConstants(SmartDashboard.getNumber("kp", 0.006), SmartDashboard.getNumber("ki", 0), SmartDashboard.getNumber("kd", 0.000100));
-
-        double heading = -Math.toRadians(gyro.getYaw());
+        //double heading = -Math.toRadians(gyro.getYaw());
 
         //x = (x * Math.cos(heading)) - (y * Math.sin(heading));
         //y = (x * Math.sin(heading)) + (y * Math.cos(heading));
