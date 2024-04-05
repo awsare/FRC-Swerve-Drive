@@ -2,9 +2,6 @@ package frc.robot.Hardware;
 
 import com.ctre.phoenix6.hardware.CANcoder;
 
-// import com.ctre.phoenix.motorcontrol.ControlMode;
-// import com.ctre.phoenix.motorcontrol.can.TalonFX;
-
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.math.controller.PIDController;
@@ -31,8 +28,6 @@ public class SwerveModule {
         steerController = new PIDController(KP, KI, KD);
         steerController.enableContinuousInput(-180, 180);
         encoder = new CANcoder(ENCODERID);
-        // encoder.configMagnetOffset(OFFSET);
-        // encoder.setPositionToAbsolute();
     }
 
     public void setConstants(double KP, double KI, double KD) {
