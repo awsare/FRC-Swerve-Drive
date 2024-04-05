@@ -3,8 +3,6 @@ package frc.robot.Hardware;
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.SPI;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
 public class SwerveChassis {
     private final SwerveModule frontLeft;
     private final SwerveModule frontRight;
@@ -51,10 +49,10 @@ public class SwerveChassis {
         double backLeftAngle = Math.atan2(a, c) / Math.PI;
         double backRightAngle = Math.atan2(a, d) / Math.PI;
 
-        frontLeft.setDriveSpeed(frontLeftSpeed * 0.1);
-        frontRight.setDriveSpeed(frontRightSpeed * 0.1);
-        backLeft.setDriveSpeed(backLeftSpeed * 0.1);
-        backRight.setDriveSpeed(backRightSpeed * 0.1);
+        frontLeft.setDriveSpeed(frontLeftSpeed);
+        frontRight.setDriveSpeed(frontRightSpeed);
+        backLeft.setDriveSpeed(backLeftSpeed);
+        backRight.setDriveSpeed(backRightSpeed);
 
         frontLeft.setSteerAngle((frontLeftAngle * 180) - 45);
         frontRight.setSteerAngle((frontRightAngle * 180) + 45);
